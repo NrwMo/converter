@@ -38,3 +38,11 @@ php yii migrate/up
 ~~~
 http://localhost:8080
 ~~~
+
+Для обновления курсов валют перейдите на вкладку `Обновить курсы` 
+
+`localhost:8080/converter/update-exchanges`
+
+Непосредственно конвертер находится на вкладке `Конвертер валют`
+
+`localhost:8080/converter/index`
