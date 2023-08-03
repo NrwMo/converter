@@ -1,4 +1,4 @@
-$('.currency-value').on('input', function(element) {
+$('.xxx-input-converter__input.xxx-full-width').on('input', function(element) {
     $.ajax({
         url: 'get-new-values',
         type: 'POST',
