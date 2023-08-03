@@ -11,15 +11,18 @@ use yii\web\Response;
 class ConverterController extends Controller
 {
 
+    public float $rubValue = 100;
+
+    /**
+     * Эндпоинт для отображения самого конвертера валют
+     */
     public function actionIndex(): string
     {
         $converterModule = new ConverterModule();
 
-        $exchanges = Exchange::find()
-            ->orderBy(['id' => SORT_ASC])
-            ->all();
+        $exchanges = Exchange::find()->orderBy(['id' => SORT_ASC])->all();
 
-        $defaultExchangeRates = $converterModule->getDefaultExchangeRates($exchanges);
+        $defaultExchangeRates = $converterModule->getDefaultExchangeRates($exchanges, $this->rubValue);
 
         return $this->render('index', [
             'exchanges' => $exchanges,
@@ -27,6 +30,9 @@ class ConverterController extends Controller
         ]);
     }
 
+    /**
+     * Эндпоинт для обновления курса валют
+     */
     public function actionUpdateExchanges(): string
     {
         $converterModule = new ConverterModule();
@@ -41,6 +47,9 @@ class ConverterController extends Controller
         return $this->render('update/success');
     }
 
+    /**
+     * Эндпоинт для получения пересчитанных значений валют
+     */
     public function actionGetNewValues(): void
     {
         $request = Yii::$app->request;
@@ -49,27 +58,15 @@ class ConverterController extends Controller
             $changedCurrency = $request->post('changedCurrency');
             $newValueOfCurrency = $request->post('newValueOfCurrency');
 
-            $data = [];
+            $converterModule = new ConverterModule();
 
             /** @var Exchange $currentCurrency */
-            $currentCurrency = Exchange::find()
-                ->where(['char_code' => $changedCurrency])
-                ->one();
+            $currentCurrency = Exchange::find()->where(['char_code' => $changedCurrency])->one();
+            $exchanges = Exchange::find()->all();
 
-            $rubValue = ($newValueOfCurrency * $currentCurrency->value_currency_to) / $currentCurrency->value_currency_from;
+            $this->rubValue = ($newValueOfCurrency * $currentCurrency->value_currency_to) / $currentCurrency->value_currency_from;
 
-            $exchanges = Exchange::find()
-                ->all();
-
-            /** @var Exchange $exchange */
-            foreach ($exchanges as $exchange) {
-                $newValue = ($rubValue * $exchange->value_currency_from) / $exchange->value_currency_to;
-
-                $data[] = [
-                    'name' => $exchange->char_code,
-                    'newValue' => round($newValue, 4)
-                ];
-            }
+            $data = $converterModule->getDefaultExchangeRates($exchanges, $this->rubValue);
 
             $response = Yii::$app->response;
             $response->format = Response::FORMAT_JSON;

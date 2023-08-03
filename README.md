@@ -1,8 +1,11 @@
-Установка
+Загрузка
 ---------
 
-Сливаем себе проект
+Сливаем проект в папку `{project_name}`
 
+~~~
+git clone https://github.com/NrwMo/converter.git {project_name}
+~~~
 
 Запуск
 ------

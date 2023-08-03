@@ -27,7 +27,7 @@ use app\models\Exchange;
                     <?php foreach ($exchanges as $key => $exchange): ?>
                         <div>
                             <label>
-                                <input class="currency-value" name="<?= $exchange->char_code; ?>-value" value="<?= round($defaultExchangeRates[$exchange->char_code], 4); ?>" id="<?= $exchange->char_code; ?>">
+                                <input class="currency-value" name="<?= $exchange->char_code; ?>-value" value="<?= $defaultExchangeRates[$exchange->char_code]['value']; ?>" id="<?= $exchange->char_code; ?>">
                             </label>
                             <span><?= $exchange->char_code; ?></span>
                             <img src="https://store.bankiros.ru/images/icons/flags/round/russia.svg"

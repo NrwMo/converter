@@ -4,9 +4,13 @@ namespace app\modules;
 
 use app\models\Exchange;
 
+/**
+ * Модуль для работы с конвертером валют
+ */
 class ConverterModule
 {
     public array $errors = [];
+
     /**
      * Метод получения актуальных курсов валют по отношению к рос. рублю
      */
@@ -55,6 +59,9 @@ class ConverterModule
 
     }
 
+    /**
+     * Метод добавления курса основной валюты RUB
+     */
     public function addDefaultExchange(): void
     {
         $exchange = new Exchange();
@@ -76,16 +83,19 @@ class ConverterModule
         }
     }
 
-    public function getDefaultExchangeRates(array $exchanges): array
+    /**
+     * Метод для пересчета из RUB во все валюты
+     */
+    public function getDefaultExchangeRates(array $exchanges, float $rubValue): array
     {
         $result = [];
 
-        $exchange = new Exchange();
-        $defaultCurrency = $exchange->getExchangeByNumCode(0);
-
         /** @var Exchange $exchange */
         foreach ($exchanges as $exchange) {
-            $result[$exchange->char_code] = ($defaultCurrency->value_currency_from * $exchange->value_currency_from) / $exchange->value_currency_to;
+            $result[$exchange->char_code] = [
+                'name' => $exchange->char_code,
+                'value' => round(($rubValue * $exchange->value_currency_from) / $exchange->value_currency_to, 4),
+            ];
         }
 
         return $result;

@@ -9,7 +9,7 @@ $('.currency-value').on('input', function(element) {
         success: function(result) {
             $.each(result.data, function(index, element) {
                 const name = '#'+element.name
-                $(name)[0].value = element.newValue
+                $(name)[0].value = element.value
             })
         }
     })
