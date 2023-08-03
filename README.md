@@ -1,7 +1,7 @@
 Загрузка
 ---------
 
-Сливаем проект в папку `{project_name}`
+Сливаем проект в любую папку `{project_name}`
 
 ~~~
 git clone https://github.com/NrwMo/converter.git {project_name}
